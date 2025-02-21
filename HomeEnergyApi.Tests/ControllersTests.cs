@@ -163,6 +163,6 @@ public class ControllersTests
         var getByLastNameResponse = await client.GetAsync(url);
         string getByLastNameStr = await getByLastNameResponse.Content.ReadAsStringAsync();
 
-        Assert.True(getByLastNameStr != "[]", $"{getByLastNameStr}");
+        Assert.True(getByLastNameStr != "[]", $"Home Energy Api was not able to find a specific home by a query paramter on GET at {url}\nReceived: {getByLastNameStr}");
     }
 }
