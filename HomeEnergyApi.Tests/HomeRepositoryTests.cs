@@ -75,6 +75,19 @@ FROM Homes;";
     }
 
     [Fact, TestPriority(3)]
+    public void HomeRepositoryCanFindByOwnerLastName()
+    {
+        using var context = CreateContext();
+        var homeRepository = new HomeRepository(context);
+       
+        string ownerLastToFind = "Testy";
+        var homes = homeRepository.FindByOwnerLastName(ownerLastToFind);
+
+        Assert.True(homes.Count() == 1);
+        Assert.True(homes[0].OwnerLastName == ownerLastToFind);
+    }
+
+    [Fact, TestPriority(4)]
     public void HomeRepositoryCanSaveANewHome()
     {
         using var context = CreateContext();
@@ -86,7 +99,7 @@ FROM Homes;";
         Assert.True(home.OwnerLastName == testHomeToSave.OwnerLastName);
     }
 
-    [Fact, TestPriority(4)]
+    [Fact, TestPriority(5)]
     public void HomeRepositoryCanUpdateAHome()
     {
         using var context = CreateContext();
@@ -98,7 +111,7 @@ FROM Homes;";
         Assert.True(home.OwnerLastName == testHomeToUpdate.OwnerLastName);
     }
 
-    [Fact, TestPriority(5)]
+    [Fact, TestPriority(6)]
     public void HomeRepositoryCanRemoveById()
     {
         using var context = CreateContext();
@@ -110,7 +123,7 @@ FROM Homes;";
         Assert.True(home == null);
     }
 
-    [Fact, TestPriority(6)]
+    [Fact, TestPriority(7)]
     public void HomeRepositoryCanReturnCount()
     {
         using var context = CreateContext();
@@ -121,14 +134,14 @@ FROM Homes;";
         Assert.True(count == 2);
     }
 
-    [Fact, TestPriority(7)]
+    [Fact, TestPriority(8)]
     public void HomeRepositoryImplementsIReadRepositoryINTHOME()
     {
         Assert.True(typeof(IReadRepository<int, Home>).IsAssignableFrom(typeof(HomeRepository)),
             "The class HomeRepository Does Not Implement \"IRepository<int, Home>\"");
     }
 
-    [Fact, TestPriority(8)]
+    [Fact, TestPriority(9)]
     public void HomeRepositoryImplementsIWriteRepositoryINTHOME()
     {
         Assert.True(typeof(IWriteRepository<int, Home>).IsAssignableFrom(typeof(HomeRepository)),

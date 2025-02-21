@@ -1,105 +1,33 @@
-# 021 Many To Many Relationships
+# 022 Query Parameter
 
 ## Lecture
 
-[![# Many To Many Relationships (Part 1)](https://img.youtube.com/vi/egmPuRlaNoo/0.jpg)](https://www.youtube.com/watch?v=LUOpye2AxVk)
-[![# Many To Many Relationships (Part 2)](https://img.youtube.com/vi/PTPPW2rllRQ/0.jpg)](https://www.youtube.com/watch?v=PTPPW2rllRQ)
+[![# Query Parameter](https://img.youtube.com/vi/T9uVniEoTpg/0.jpg)](https://www.youtube.com/watch?v=T9uVniEoTpg)
 
 ## Instructions
 
 At the start of this lesson, you'll notice the `UtilityProvider` model and all associated code has been made blank. This is because you will be rebuilding that model as a new Many to Many relationship.
 
-In `HomeEnergyApi/Models/UtilityProvider.cs`
-- Create a public class `UtilityProvider` with the following property names / types
-    - Id / `int`
-    - Name / `string?`
-    - ProvidedUtilities / `ICollection<string>`
+In `HomeEnergyApi/Controllers/HomeController.cs`
+- On `HomeController`, create a new private property `homeByOwnerLastNameRepository` of type `IOwnerLastNameQueryable<Home>`
+- On the constructor for `HomeController` add an argument of type `IOwnerLastNameQueryable<Home>` and assign it's value to the newly created property `homeByOwnerLastNameRepository`
+- Modify the `Get()` method
+    - Add a new argument `ownerLastName` of type `string?` with the and designate it as a query parameter
+    - If the query parameter is null, the behavior should be the same as before
+    - If the query parameter is not null, the method should return a `200: Ok` HTTP status code, and the result of `homeByOwnerLastNameRepository.FindByOwnerLastName((string)ownerLastName)`
 
-In `HomeEnergyApi/Models/HomeUtilityProvider.cs`
-- Create a public class `HomeUtilityProvider` with the following property names / types
-    - Id / `int`
-    - UtilityProviderId / `int`
-    - UtilityProvider / `UtilityProvider`
-        - With the `JsonIgnore` attribute
-    - HomeId / `int`
-    - Home / `Home`
-        - With the `JsonIgnore` attribute
-
-In `HomeEnergyApi/Models/Home.cs`
-- Give `Home` the public property `HomeUtilityProviders` with the type `ICollection<HomeUtilityProvider>`
-
-In `HomeEnergyApi/Models/UtilityProvider.cs`
-- Give `UtilityProvider` the public property `HomeUtilityProviders` with the type `ICollection<HomeUtilityProvider>`
-
-In `HomeEnergyApi/Models/HomeDbContext.cs`
-- Give `HomeDbContext` the following property names / types
-    - UtilityProviders / `DbSet<UtilityProvider>`
-    - HomeUtilityProviders / `DbSet<HomeUtilityProvider>`
-
-In `HomeEnergyApi/Controllers/UtilityProviderAdminController.cs`
-- Create a class `UtilityProviderAdminController` implementing `ControllerBase`
-    - Give `UtilityProviderAdminController` the following attributes
-        - ApiController
-        - Route("admin/UtilityProviders")
-    - Give `UtilityProviderAdminController` the following private property names / types
-        - repository / `IWriteRepository<int, UtilityProvider>`
-        - mapper / `IMapper`
-    - Create a constructor for `UtilityProviderAdminController` with two arguments of type `IWriteRepository<int, UtilityProvider>` and `IMapper`
-        - Assign the value of the passed arguments to the corresponding properties with the same type
-    - Create a method for `UtilityProviderAdminController` named `Post` with one argument of type `UtilityProviderDto`
-        - In the body, write logic similar to the `Post()` method in the `HomeAdminController`, allowing you to map and save a new `UtilityProvider` from the data passed in from the `UtilityProviderDto`
-        - Ensure you return a `Created` HTTP status code, along with the created `UtilityProvider` and its location
-
-In `HomeEnergyApi/Models/UtilityProviderRepository.cs`
-- Create a public class `UtilityProviderRepository` implementing `IWriteRepository<int, UtilityProvider>` and  `IReadRepository<int, UtilityProvider>`
-    - Write code similar to that in `HomeRepository.cs` so as to ensure identical functionality for `UtilityProvider`s including the ability to Save, Update, Remove, Find all, Find by Id, and return a count
-
-In `HomeEnergyApi/Dtos/UtilityProviderDto.cs`
-- Create a public class `UtilityProviderDto` with the following property names / types
-    - Name / `string`
-    - ProvidedUtilities / `ICollection<string>`
-
-In `HomeEnergyApi/Dtos/HomeProfile.cs`
-- Create a new map for the source `UtilityProviderDto` to destination `UtilityProvider`
-    - You won't need to add member specific logic as you did for `HomeDto`
-
-In `HomeEnergyApi/Controllers/HomeAdminController.cs`
-- Add a private property `homeUtilityProviderService` of type `HomeUtilityProviderService`
-- Add an argument to the constructor of type `HomeUtilityProviderService` and assign it's value to the new property `homeUtilityProviderService`
-- In the `CreateHome()` method, add a line after the home is saved that calls `homeUtilityProviderService.Associate()` with the arguments `home` and `homeDto.UtilityProviderIds`
-
-In `HomeEnergyApi/Dtos/HomeDto.cs`
-- Add a public property `UtilityProviderIds` of type `ICollection<int>?`
-
-In `HomeEnergyApi/Services/HomeUtilityProviderService.cs`
-- Create a public class `HomeUtilityProviderService`
-    - Give `HomeUtilityProviderService` the following property names / types
-        - utilityProviderRepository / `IReadRepository<int, UtilityProvider>`
-        - homeUtilityProviderRepository / `IWriteRepository<int, HomeUtilityProvider>`
-    - Create a constructor for `HomeUtilityProviderService` taking two arguments of types `IReadRepository<int, UtilityProvider>` and `IWriteRepository<int, HomeUtilityProvider>`
-        - Assign the value of the passed arguments to the corresponding properties with the same type
-    - Create a method `Associate()` taking two arguments of types `Home` and `ICollection<int>` (the passed  `ICollection<int>` will be Utility Provider Ids)
-        - If the passed Utility Provider Ids are not null...
-            - For each passed Utility Provider Id...
-                - Find the `UtilityProvider` associated with the passed Id and assign it to a variable
-                - Create a new `HomeUtilityProvider`
-                    - Set the `UtilityProvider` property to the found `UtilityProvider`
-                    - Set the `UtilityProviderId` property to id used to find the `UtilityProvider`
-                    - Set the `HomeId` property to the passed home's Id
-                    - Set the `Home` property to the passed home
-                - Save the created `HomeUtilityProvider` to the private property of type `IWriteRepository<int, HomeUtilityProvider>`
-
-In `HomeEnergyApi/Models/HomeUtilityProviderRepository.cs`
-- Create a public class `HomeUtilityProviderRepository` implementing `IWriteRepository<int, HomeUtilityProvider>` and  `IReadRepository<int, HomeUtilityProvider>`
-    - Write code similar to that in `HomeRepository.cs` so as to ensure identical functionality for `HomeUtilityProvider`s including the ability to Save, Update, Remove, Find all, Find by Id, and return a count
+In `HomeEnergyApi/Models/IOwnerLastNameQueryable.cs`
+- Create a new public interface `IOwnerLastNameQueryable<T>`
+    - Create an interface method `FindByDate()` taking one argument of type `string`
 
 In `HomeEnergyApi/Models/HomeRepository.cs`
-- Modify the `FindAll()` method to include `HomeUtilityProvider`s in the list it returns
+- Have `HomeRepository` implement the interface `IOwnerLastNameQueryable<Home>`
+- Implement the member of `IOwnerLastNameQueryable<T>`, `FindByOwnerLastName()` with one argument of type `string`
+    - Have this method return the same set of homes as `FindAll()`, except only including those where the passed `string` matches the home's `OwnerLastName` property
 
 In `HomeEnergyApi/Program.cs`
-- Similar to how the Home repository and associated read/write repositories are being added as a scoped service, add `UtilityProviderRepository` and associated read/write repositories as scoped services
-- Similar to how the Home repository and associated read/write repositories are being added as a scoped service, add `HomeUtilityProviderRepository` and associated read/write repositories as scoped services
-- Add `HomeUtilityProviderService` as a transient service
+- Add a new scoped service with type `IOwnerLastNameQueryable<Home>` and passing the required service `HomeRepository` as its provider
+
 
 In your terminal
 - ONLY IF you are working on codespaces or a different computer/environment as the previous lesson and don't have `dotnet-ef` installed globally, run `dotnet tool install --global dotnet-ef`, otherwise skip this step

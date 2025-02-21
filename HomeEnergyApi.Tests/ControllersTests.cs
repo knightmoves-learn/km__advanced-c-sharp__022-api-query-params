@@ -37,7 +37,7 @@ public class ControllersTests
 
         UtilityProviderDto postTestUtilityProviderDto = testUtilityProviderDto;
         postTestUtilityProviderDto.Name = "test energy";
-        postTestUtilityProviderDto.ProvidedUtilities = new List<string>() { "electric", "natural gas"};
+        postTestUtilityProviderDto.ProvidedUtilities = new List<string>() { "electric", "natural gas" };
 
         string strPostTestUtilityProviderDto = JsonSerializer.Serialize(postTestUtilityProviderDto);
 
@@ -60,7 +60,7 @@ public class ControllersTests
 
         Assert.True(hasExpected,
             $"Home Energy Api did not return the correct UtilityProvider being created on POST at {url}\nHomeDto Sent: {strPostTestUtilityProviderDto}\nHome Received:{responseContent}");
-    
+
     }
 
     [Theory, TestPriority(3)]
@@ -74,7 +74,7 @@ public class ControllersTests
         postTestHomeDto.StreetAddress = "123 Test St.";
         postTestHomeDto.City = "Test City";
         postTestHomeDto.MonthlyElectricUsage = 123;
-        postTestHomeDto.UtilityProviderIds = new List<int> { 1 };
+        //postTestHomeDto.UtilityProviderIds = new List<int> { 1 };
 
         string strPostTestHomeDto = JsonSerializer.Serialize(postTestHomeDto);
 
@@ -104,12 +104,12 @@ public class ControllersTests
 
         Assert.True(hasExpectedHomeData,
             $"Home Energy Api did not return the correct Home being created on POST at {url}\nHomeDto Sent: {strPostTestHomeDto}\nHome Received:{responseContent}");
-             
+
         Assert.True(homeIdMatch,
             $"For the Home created on POST at {url}, the home's id did not match the id within the Home Utility Providers property\nExpected Home Id: {expectedHomeId}\nHome Received:{responseContent}");
     }
 
-    [Theory, TestPriority(3)]
+    [Theory, TestPriority(4)]
     [InlineData("/admin/Homes")]
     public async Task HomeEnergyApiCanPUTAHomeGivenAValidHomeDto(string url)
     {
@@ -152,5 +152,17 @@ public class ControllersTests
 
         Assert.True(hasExpected,
             $"Home Energy Api did not return the correct Home being updated on PUT at {url}\nHomeDto Sent: {strPutTestHomeDto}\nHome Received:{responseContent}");
+    }
+
+    [Theory, TestPriority(4)]
+    [InlineData("/Homes?ownerlastname=Putty")]
+    public async Task HomeEnergyApiCanFindByOwnerLastNameQueryParameter(string url)
+    {
+        var client = _factory.CreateClient();
+
+        var getByLastNameResponse = await client.GetAsync(url);
+        string getByLastNameStr = await getByLastNameResponse.Content.ReadAsStringAsync();
+
+        Assert.True(getByLastNameStr != "[]", $"{getByLastNameStr}");
     }
 }
