@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HomeEnergyApi.Models
 {
-    public class HomeRepository : IReadRepository<int, Home>, IWriteRepository<int, Home>, IOwnerLastNameQueryable<Home>
+    public class HomeRepository : IReadRepository<int, Home>, IWriteRepository<int, Home>
     {
         private HomeDbContext context;
 
@@ -57,15 +57,6 @@ namespace HomeEnergyApi.Models
         public int Count()
         {
             return context.Homes.Count();
-        }
-
-        public List<Home> FindByOwnerLastName(string ownerLastName)
-        {
-            return context.Homes
-                .Where(h => h.OwnerLastName == ownerLastName)
-                .Include(h => h.HomeUsageData)
-                .Include(h => h.HomeUtilityProviders)
-                .ToList();
         }
     }
 }

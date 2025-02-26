@@ -9,25 +9,17 @@ namespace HomeEnergyApi.Controllers
     public class HomesController : ControllerBase
     {
         private IReadRepository<int, Home> repository;
-        private IOwnerLastNameQueryable<Home> homeByOwnerLastNameRepository;
 
-        public HomesController(IReadRepository<int, Home> repository, IOwnerLastNameQueryable<Home> homeByOwnerLastNameRepository)
+        public HomesController(IReadRepository<int, Home> repository)
         {
             this.repository = repository;
-            this.homeByOwnerLastNameRepository = homeByOwnerLastNameRepository;
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] string? ownerLastName)
+        public IActionResult Get()
         {
-            if (ownerLastName != null)
-            {
-                return Ok(homeByOwnerLastNameRepository.FindByOwnerLastName((string)ownerLastName));
-            }
-            else
-            {
                 return Ok(repository.FindAll());
-            }
+
         }
 
         [HttpGet("{id}")]

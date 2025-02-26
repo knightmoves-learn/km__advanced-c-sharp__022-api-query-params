@@ -5,9 +5,6 @@
 [![# Query Parameter](https://img.youtube.com/vi/T9uVniEoTpg/0.jpg)](https://www.youtube.com/watch?v=T9uVniEoTpg)
 
 ## Instructions
-
-At the start of this lesson, you'll notice the `UtilityProvider` model and all associated code has been made blank. This is because you will be rebuilding that model as a new Many to Many relationship.
-
 In `HomeEnergyApi/Controllers/HomeController.cs`
 - On `HomeController`, create a new private property `homeByOwnerLastNameRepository` of type `IOwnerLastNameQueryable<Home>`
 - On the constructor for `HomeController` add an argument of type `IOwnerLastNameQueryable<Home>` and assign it's value to the newly created property `homeByOwnerLastNameRepository`
@@ -27,13 +24,6 @@ In `HomeEnergyApi/Models/HomeRepository.cs`
 
 In `HomeEnergyApi/Program.cs`
 - Add a new scoped service with type `IOwnerLastNameQueryable<Home>` and passing the required service `HomeRepository` as its provider
-
-
-In your terminal
-- ONLY IF you are working on codespaces or a different computer/environment as the previous lesson and don't have `dotnet-ef` installed globally, run `dotnet tool install --global dotnet-ef`, otherwise skip this step
-    - To check if you have `dotnet-ef` installed, run `dotnet-ef --version`
-- Run `dotnet ef migrations add AddManyToManyUtilityProviders`
-- Run `dotnet ef database update`
 
 ## Additional Information
 - Some Models may have changed for this lesson from the last, as always all code in the lesson repository is available to view
