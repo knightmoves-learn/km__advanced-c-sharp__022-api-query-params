@@ -60,7 +60,7 @@ namespace HomeEnergyApi.Models
             return context.Homes.Count();
         }
 
-        public List<Home> FindByLastName(string lastName)
+        public List<Home> FindByOwnerLastName(string lastName)
         {
             return context.Homes
             .Where(h => h.OwnerLastName == lastName)

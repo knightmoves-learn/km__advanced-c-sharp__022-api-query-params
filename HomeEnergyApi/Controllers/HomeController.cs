@@ -23,7 +23,7 @@ namespace HomeEnergyApi.Controllers
         {
             if (ownerLastName != null)
             {
-                return Ok(homeByOwnerLastName.FindByLastName(ownerLastName));
+                return Ok(homeByOwnerLastName.FindByOwnerLastName(ownerLastName));
             } 
             else
             {
