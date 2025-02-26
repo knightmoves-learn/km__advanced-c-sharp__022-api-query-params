@@ -153,16 +153,4 @@ public class ControllersTests
         Assert.True(hasExpected,
             $"Home Energy Api did not return the correct Home being updated on PUT at {url}\nHomeDto Sent: {strPutTestHomeDto}\nHome Received:{responseContent}");
     }
-
-    // [Theory, TestPriority(4)]
-    // [InlineData("/Homes?ownerlastname=Putty")]
-    // public async Task HomeEnergyApiCanFindByOwnerLastNameQueryParameter(string url)
-    // {
-    //     var client = _factory.CreateClient();
-
-    //     var getByLastNameResponse = await client.GetAsync(url);
-    //     string getByLastNameStr = await getByLastNameResponse.Content.ReadAsStringAsync();
-
-    //     Assert.True(getByLastNameStr != "[]", $"Home Energy Api was not able to find a specific home by a query paramter on GET at {url}\nReceived: {getByLastNameStr}");
-    // }
 }

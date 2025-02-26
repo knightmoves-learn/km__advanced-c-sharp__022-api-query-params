@@ -28,19 +28,25 @@ In `HomeEnergyApi/Models/HomeRepository.cs`
 In `HomeEnergyApi/Program.cs`
 - Add a new scoped service with type `IOwnerLastNameQueryable<Home>` and passing the required service `HomeRepository` as its provider
 
+
+In your terminal
+- ONLY IF you are working on codespaces or a different computer/environment as the previous lesson and don't have `dotnet-ef` installed globally, run `dotnet tool install --global dotnet-ef`, otherwise skip this step
+    - To check if you have `dotnet-ef` installed, run `dotnet-ef --version`
+- Run `dotnet ef migrations add AddManyToManyUtilityProviders`
+- Run `dotnet ef database update`
+
 ## Additional Information
 - Some Models may have changed for this lesson from the last, as always all code in the lesson repository is available to view
 - Along with `using` statements being added, any packages needed for the assignment have been pre-installed for you, however in the future you may need to add these yourself
 
 ## Building toward CSTA Standards:
-- Compare levels of abstraction and interactions between application software, system software, and hardware layers (3A-CS-02) https://www.csteachers.org/page/standards
-- Create artifacts by using procedures within a program, combinations of data and procedures, or independent but interrelated programs (3A-AP-18) https://www.csteachers.org/page/standards
-- Use lists to simplify solutions, generalizing computational problems instead of repeatedly using simple variables (3A-AP-14) https://www.csteachers.org/page/standards
+- Create prototypes that use algorithms to solve computational problems by leveraging prior student knowledge and personal interests (3A-AP-13) https://www.csteachers.org/page/standards
 - Decompose problems into smaller components through systematic analysis, using constructs such as procedures, modules, and/or objects (3A-AP-17) https://www.csteachers.org/page/standards
-- Compare and contrast fundamental data structures and their uses (3B-AP-12) https://www.csteachers.org/page/standards
+- Create artifacts by using procedures within a program, combinations of data and procedures, or independent but interrelated programs (3A-AP-18) https://www.csteachers.org/page/standards
+- Use and adapt classic algorithms to solve computational problems (3B-AP-10) https://www.csteachers.org/page/standards
+- Demonstrate code reuse by creating programming solutions using libraries and APIs (3B-AP-16) https://www.csteachers.org/page/standards
 
 ## Resources
-- https://en.wikipedia.org/wiki/Query_string
-- https://learn.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-9.0
+- https://github.com/AutoMapper/AutoMapper
 
 Copyright &copy; 2025 Knight Moves. All Rights Reserved.
